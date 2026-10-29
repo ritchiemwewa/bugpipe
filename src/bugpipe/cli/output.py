@@ -17,7 +17,7 @@ from rich.table import Table
 
 from ..api.models import Comment, Exportable, Issue, Results
 
-__all__ = ["FAIL", "INFO", "OK", "WARN", "export_out", "print_out"]
+__all__ = ["FAIL", "INFO", "OK", "WARN", "display", "export"]
 
 #: Issue table columns: header -> field name. Int cells are right-aligned.
 ISSUE_COLUMNS = {
@@ -49,7 +49,7 @@ INFO = "[bold blue]*[/bold blue]"
 console = Console(log_time=False, log_path=False)
 
 
-def prettify(output: t.Any) -> Group | None:
+def prettify(*, output: t.Any) -> Group | None:
     """
     Build a pretty-printed view of a result, one item per block.
 
@@ -64,7 +64,7 @@ def prettify(output: t.Any) -> Group | None:
     return Group(*blocks[:-1], fit=False)
 
 
-def table(rows: t.Sequence[dict | Exportable] | Exportable) -> Table | None:
+def table(*, rows: t.Sequence[dict | Exportable] | Exportable) -> Table | None:
     """
     Build a table.
 
@@ -109,7 +109,7 @@ def table(rows: t.Sequence[dict | Exportable] | Exportable) -> Table | None:
     return table
 
 
-def print_out(
+def display(*,
     output: list[dict] | Results[Issue] | Results[Comment] | Issue | Comment,
     no_pager: bool = False,
     prettified: bool = False,
@@ -147,7 +147,7 @@ def print_out(
         console.print(render)
 
 
-def export_out(output: Exportable | Results[t.Any], formats: list[str]):
+def export(*, output: Exportable | Results[t.Any], formats: list[str]):
     """
     Write a result to timestamped files, one per format.
 

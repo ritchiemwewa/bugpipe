@@ -1,12 +1,12 @@
 [project]
 name = "bugpipe"
-version = "3.1.1"
-description = "Unofficial Python client for Buganizer; the Google Issue Tracking system"
+version = "3.1.2"
+description = "Unofficial Python client for the Google Issue Tracking system (Buganizer)."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.13"
 authors = [
-    { name = "Ritchie Mwewa", email = "rly0nheart@duck.com" },
+    { name = "Ritchie Mwewa", email = "pypi@mwewa.org" },
 ]
 keywords = [
     "buganizer",
@@ -45,7 +45,7 @@ dev = [
     "myst-parser>=5.1.0",
     "sphinx>=9.1.0",
     "sphinx-copybutton>=0.5.2",
-    "sphinx-rtd-theme>=3.1.0",
+    "furo>=2025.12.19",
 ]
 
 [project.urls]
@@ -54,6 +54,7 @@ Documentation = "https://bugpipe.readthedocs.io"
 Repository = "https://github.com/rly0nheart/bugpipe"
 
 [project.scripts]
+bug = "bugpipe.cli:start"
 bugpipe = "bugpipe.cli:start"
 
 [build-system]

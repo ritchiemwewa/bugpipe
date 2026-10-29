@@ -724,14 +724,14 @@ class SearchResult:
         total_count: Total number of matching issues (across all pages).
         next_page_token: Token for fetching the next page, if there are more.
         query: The query string used for this search (stored for pagination).
-        page_size: The page size used for this search (stored for pagination).
+        per_page: The page size used for this search (stored for pagination).
     """
 
     issues: Results[Issue]
     total_count: int
     next_page_token: str | None = None
     query: str = ""
-    page_size: int = 50
+    per_page: int = 50
 
     @property
     def has_more(self) -> bool:

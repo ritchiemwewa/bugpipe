@@ -192,14 +192,14 @@ class Bugpipe:
     def search(
         self,
         query: str,
-        page_size: int = 50,
+        per_page: int = 50,
         page_token: str | None = None,
     ) -> SearchResult:
         """
         Search for issues in the Google Issue Tracker.
 
         :param query: Search query string (e.g. "status:open", "component:Blink").
-        :param page_size: Number of results per page (25, 50, 100, or 250).
+        :param per_page: Number of results per page (25, 50, 100, or 250).
         :param page_token: Pagination token from a previous SearchResult.next_page_token.
         :return: Matching issues, total count, and pagination token.
         """
@@ -208,9 +208,9 @@ class Bugpipe:
             raise ValueError("Search query cannot be empty")
 
         query_payload: list = (
-            [query, None, page_size, page_token]
+            [query, None, per_page, page_token]
             if page_token
-            else [query, None, page_size]
+            else [query, None, per_page]
         )
         tracker_filter = self.tracker_ids if self.tracker_ids else None
         request_body: list = [
@@ -227,7 +227,7 @@ class Bugpipe:
         response: Response = self._http.post(url, json=request_body)
         response.raise_for_status()
         return parse_search_response(
-            raw_text=response.text, query=query, page_size=page_size
+            raw_text=response.text, query=query, per_page=per_page
         )
 
     def next_page(self, result: SearchResult) -> SearchResult | None:
@@ -243,7 +243,7 @@ class Bugpipe:
 
         return self.search(
             query=result.query,
-            page_size=result.page_size,
+            per_page=result.per_page,
             page_token=result.next_page_token,
         )
 
@@ -302,7 +302,7 @@ class Bugpipe:
         self,
         issue_id: int,
         sort_order: str = "ASC",
-        page_size: int = 500,
+        per_page: int = 500,
         page_token: str | None = None,
     ) -> CommentsResult:
         """
@@ -313,13 +313,13 @@ class Bugpipe:
 
         :param issue_id: The issue ID to fetch comments for.
         :param sort_order: ``"ASC"`` for oldest-first, ``"DESC"`` for newest-first.
-        :param page_size: Number of comments per page (max 500).
+        :param per_page: Number of comments per page (max 500).
         :param page_token: Pagination token from a previous CommentsResult.
         :return: Comments and pagination info.
         """
 
         url: str = f"{self.base_endpoint}/issues/{issue_id}/listComments"
-        request_body: list = [issue_id, sort_order, page_size]
+        request_body: list = [issue_id, sort_order, per_page]
         if page_token:
             request_body.append(page_token)
 

@@ -10,7 +10,7 @@ from rich.status import Status
 from ..api.client import TRACKERS, Bugpipe
 from . import metadata, update_checker
 from .commands import parse_args
-from .output import FAIL, INFO, WARN, console, print_out
+from .output import FAIL, INFO, WARN, console, display
 
 
 def create_client(args: argparse.Namespace, status: Status):
@@ -53,7 +53,7 @@ def start():
     args = parse_args()
 
     if args.command == "trackers":
-        print_out(output=TRACKERS, prettified=args.raw, no_pager=args.no_pager)
+        display(output=TRACKERS, prettified=args.raw, no_pager=args.no_pager)
         console.print(f"\n{len(TRACKERS)} trackers available")
         return
 

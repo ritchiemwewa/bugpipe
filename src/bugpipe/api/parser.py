@@ -401,7 +401,7 @@ def __parse_issue_from_entry(raw_entry: list) -> Issue:
 def __parse_search_response(
     raw_text: str,
     query: str = "",
-    page_size: int = 50,
+    per_page: int = 50,
 ) -> SearchResult:
     """
     Parse a search/list response.
@@ -415,7 +415,7 @@ def __parse_search_response(
 
     :param raw_text: Raw response body from POST /action/issues/list.
     :param query: The query string used (stored on the result for pagination).
-    :param page_size: The page size used (stored on the result for pagination).
+    :param per_page: The page size used (stored on the result for pagination).
     :return: Parsed issues with pagination info.
     """
 
@@ -439,7 +439,7 @@ def __parse_search_response(
         total_count=total_count,
         next_page_token=page_token if page_token else None,
         query=query,
-        page_size=page_size,
+        per_page=per_page,
     )
 
 
