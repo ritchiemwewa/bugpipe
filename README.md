@@ -8,7 +8,7 @@ Unofficial Python client for the Google Issue Tracking system (Buganizer)
 ## Quick Start
 
 ```bash
-bugpipe search "status:open" -t chromium -t webrtc -t fuchsia
+bugpipe search "status:open" -l 25 -t chromium -t webrtc -t fuchsia
 ```
 
 ```python

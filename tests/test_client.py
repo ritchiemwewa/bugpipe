@@ -38,7 +38,7 @@ class TestSearch:
         :param client: Bugpipe client.
         """
 
-        result = client.search("status:open", page_size=5)
+        result = client.search("status:open", per_page=5)
 
         assert isinstance(result, SearchResult)
         assert result.total_count > 0
@@ -52,7 +52,7 @@ class TestSearch:
         :param client: Bugpipe client.
         """
 
-        result = client.search("status:open", page_size=3)
+        result = client.search("status:open", per_page=3)
 
         for issue in result.issues:
             assert isinstance(issue, Issue)
@@ -70,7 +70,7 @@ class TestSearch:
         :param client: Bugpipe client.
         """
 
-        result = client.search("status:open", page_size=1)
+        result = client.search("status:open", per_page=1)
 
         assert result.has_more is True
         assert result.next_page_token is not None
@@ -83,7 +83,7 @@ class TestSearch:
         :param client: Bugpipe client.
         """
 
-        result = client.search("component:Blink", page_size=3)
+        result = client.search("component:Blink", per_page=3)
 
         assert isinstance(result, SearchResult)
         assert result.total_count > 0
@@ -100,7 +100,7 @@ class TestGetIssue:
         :returns: The first accessible :class:`Issue`.
         """
 
-        search = client.search("status:open", page_size=10)
+        search = client.search("status:open", per_page=10)
         for candidate in search.issues:
             try:
                 return client.issue(candidate.id)
@@ -174,7 +174,7 @@ class TestGetIssue:
         :param client: Bugpipe client.
         """
 
-        search = client.search("status:fixed", page_size=10)
+        search = client.search("status:fixed", per_page=10)
         for candidate in search.issues:
             try:
                 issue = client.issue(candidate.id)
@@ -196,7 +196,7 @@ class TestBatchGetIssues:
         """
 
         # Get some issue IDs first
-        search = client.search("status:open", page_size=3)
+        search = client.search("status:open", per_page=3)
         ids = [i.id for i in search.issues]
 
         issues = client.issues(ids)
@@ -212,7 +212,7 @@ class TestBatchGetIssues:
         :param client: Bugpipe client.
         """
 
-        search = client.search("status:open", page_size=2)
+        search = client.search("status:open", per_page=2)
         ids = [i.id for i in search.issues]
 
         issues = client.issues(ids)
@@ -234,7 +234,7 @@ class TestGetIssueUpdates:
         """
 
         # Find an issue that has comments
-        search = client.search("status:fixed", page_size=5)
+        search = client.search("status:fixed", per_page=5)
         # Pick one with comments
         target = None
         for issue in search.issues:
@@ -257,7 +257,7 @@ class TestGetIssueUpdates:
         :param client: Bugpipe client.
         """
 
-        search = client.search("status:fixed", page_size=5)
+        search = client.search("status:fixed", per_page=5)
         target = next((i for i in search.issues if i.comment_count > 0), None)
         if target is None:
             pytest.skip("No issue with comments found")
@@ -289,7 +289,7 @@ class TestGetComments:
         :returns: A tuple of the matching :class:`Issue` and its :class:`CommentsResult`.
         """
 
-        search = client.search("status:fixed", page_size=10)
+        search = client.search("status:fixed", per_page=10)
         candidates = [
             issue for issue in search.issues if issue.comment_count >= min_comments
         ]
@@ -365,13 +365,13 @@ class TestGetComments:
 
         candidate, _ = self._find_public_comments(client, min_comments=2)
 
-        page1 = client.comments(candidate.id, page_size=1)
+        page1 = client.comments(candidate.id, per_page=1)
         assert len(page1.comments) == 1
         assert page1.has_more
 
         page2 = client.comments(
             candidate.id,
-            page_size=1,
+            per_page=1,
             page_token=page1.next_page_token,
         )
         assert len(page2.comments) == 1
